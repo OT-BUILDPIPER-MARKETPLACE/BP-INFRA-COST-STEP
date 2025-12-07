@@ -17,9 +17,24 @@ sleep $SLEEP_DURATION
 logInfoMessage "Executing command"
 logInfoMessage "Calculatig Cost !!!"
 
-cd $code/${CODE_PATH}
+TARGET_DIR="$code/${CODE_PATH}"
+
+if [[ ! -d "$TARGET_DIR" ]]; then
+    logErrorMessage "Directory does not exist: $TARGET_DIR"
+    exit 1
+else
+    if cd "$TARGET_DIR"; then
+        logInfoMessage "Changed directory to $TARGET_DIR"
+    else
+        logErrorMessage "Failed to change directory to $TARGET_DIR"
+        exit 1
+    fi
+fi
 
 output=`infracost breakdown --path .`
 
 echo "${output}"
+
+TASK_STATUS=$?
+saveTaskStatus ${TASK_STATUS} ${ACTIVITY_SUB_TASK_CODE}
 
