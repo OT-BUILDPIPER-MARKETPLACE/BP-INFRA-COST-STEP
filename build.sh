@@ -17,6 +17,13 @@ sleep $SLEEP_DURATION
 logInfoMessage "Executing command"
 logInfoMessage "Calculatig Cost !!!"
 
+if [[ -z "${INFRACOST_API_KEY}" ]]; then
+    logErrorMessage "Infracost API key not found."
+    logErrorMessage "Please set INFRACOST_API_KEY environment variable"
+    exit 1
+fi
+
+
 TARGET_DIR="$code/${CODE_PATH}"
 
 if [[ ! -d "$TARGET_DIR" ]]; then
